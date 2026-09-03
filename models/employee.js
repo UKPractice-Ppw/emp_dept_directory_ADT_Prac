@@ -16,9 +16,13 @@ const Employee = sequelize.define('Employee', {
   }
 });
 
-
 Employee.associate = (models) => {
 Employee.belongsTo(models.Department, { foreignKey: 'Dept_id' });
+Employee.belongsToMany(models.Project, {
+through: models.EmployeeProject,
+foreignKey: 'EmployeeID',
+otherKey: 'ProjectID',
+});
 };
 
 

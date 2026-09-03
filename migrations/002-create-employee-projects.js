@@ -3,7 +3,7 @@ module.exports = {
 up: 
     async ({ context: queryInterface }) => 
     {
-    await queryInterface.createTable('EmployeeProject', 
+    await queryInterface.createTable('EmployeeProjects', 
     {
         id: 
         {
@@ -53,7 +53,7 @@ up:
             allowNull: false,
         },
     });
-    await queryInterface.addConstraint('EmployeeProject', {
+    await queryInterface.addConstraint('EmployeeProjects', {
         fields: ['EmployeeID','ProjectID'],
         type: 'unique',
         name: 'unique_emp_project'
@@ -61,6 +61,6 @@ up:
 },
     down: async ({ context: queryInterface }) => 
     {
-        await queryInterface.dropTable('EmployeeProject');
+        await queryInterface.dropTable('EmployeeProjects');
     },
 };

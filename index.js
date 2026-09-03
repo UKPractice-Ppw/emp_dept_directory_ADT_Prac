@@ -1,5 +1,5 @@
 const sequelize = require('./config/database');
-const { Department , Employee } = require('./models');
+const { Department , Employee ,Project, EmployeeProject} = require('./models');
 //const Department = require('./models/department');
 
 async function main() {
@@ -25,7 +25,7 @@ async function main() {
     console.log("Departments Craeted: ", Department1 , Department2);
 
 
-    await Employee.create(
+    const emp1 = await Employee.create(
       {
         name: 'Mansi Patel',
         email: 'mspatel@gmail.com',
@@ -33,7 +33,7 @@ async function main() {
         Dept_id: Department2.id
     }
     );
-    await Employee.create(
+    const emp2 = await Employee.create(
       {
         name: 'Tisha Khandelwal',
         email: 'tkh2003@gmail.com',
@@ -41,7 +41,7 @@ async function main() {
         Dept_id: Department1.id
     }
     );
-    await Employee.create(
+    const emp3 = await Employee.create(
       {
         name: 'Hiral Maurya',
         email: 'mheer2030@gmail.com',
@@ -50,12 +50,50 @@ async function main() {
     }
     );
 
+    const proj1 = await Project.create(
+      {
+        name: "Project no 1",
+        deadline: "2027-05-11"
+      }
+    );
+
+    const proj2 = await Project.create(
+      {
+        name: "Project no 2",
+        deadline: "2026-11-30"
+      }
+    );
+
+    await emp1.addProject(proj1, {through: { role: 'Developer', hoursAllocated: 100 }});
+    await emp1.addProject(proj2, {through: { role: 'Tester', hoursAllocated: 50 }});
+    await emp2.addProject(proj1, {through: { role: 'Manager', hoursAllocated: 200 }});
+    await emp3.addProject(proj2, {through: { role: 'Developer', hoursAllocated: 150 }});
+
     const emp = await Employee.findAll({ include: Department });
     console.log(emp.map((b) => b.toJSON()));
-  } catch (err) 
+
+    const empWithProjects = await Employee.findOne(
+      {
+        where: {id: emp1.id},
+        include: [Department,Project]
+      }
+    );
+    console.log('1 Employee with all of its projects: ',empWithProjects.toJSON());
+
+    const projectsWithEmp = await Project.findOne(
+      {
+        where: {id: proj1.id},
+        include: [Employee]
+      }
+    );
+    console.log('Project with all employees: ',projectsWithEmp.toJSON());
+
+  } 
+  catch (err) 
   {
     console.error('Unable to connect or query:', err);
-  } finally 
+  } 
+  finally 
   {
     await sequelize.close();
   }
