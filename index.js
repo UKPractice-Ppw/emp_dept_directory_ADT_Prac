@@ -88,6 +88,29 @@ async function main() {
     );
     console.log('Project with all employees: ',projectsWithEmp.toJSON());
 
+    // Update the role of an employee in a project
+    await EmployeeProject.update(
+      { role: 'Lead Developer' },
+      { where: { EmployeeID: emp1.id, ProjectID: proj2.id } }
+    );
+    // Fetch the updated employee-project relationship
+    const updatedEmpProj = await EmployeeProject.findOne({
+      where: { EmployeeID: emp1.id, ProjectID: proj2.id }
+    });
+    console.log('Employee Role Updated from tester to lead developer:', updatedEmpProj.toJSON());
+
+
+    // Delete an employee-project relationship
+    await EmployeeProject.destroy({
+      where: { EmployeeID: emp1.id, ProjectID: proj1.id }
+    });
+    // Verify the deletion
+    const deletedEmpProj = await EmployeeProject.findOne({
+      where: { EmployeeID: emp1.id, ProjectID: proj1.id }
+    });
+    console.log('Employee-Project relationship deleted:', deletedEmpProj); // Should be null
+
+
   } 
   catch (err) 
   {
