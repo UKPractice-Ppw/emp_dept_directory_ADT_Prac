@@ -301,23 +301,6 @@ models/index.js (loads all models)
 
 ---
 
-### **.env**
-**Purpose:** Environment configuration file containing database credentials.
-
-**Variables:**
-```
-DB_NAME=dept_emp_db          # Database name
-DB_USER=postgres              # Database user
-DB_PASSWORD=admin123          # Database password
-DB_HOST=localhost             # Database host
-DB_PORT=5432                  # Database port (PostgreSQL default)
-DB_SSL=false                  # SSL connection flag
-```
-
-**Security Note:** This file should be added to `.gitignore` in production to prevent exposing credentials.
-
----
-
 ### **.gitignore**
 **Purpose:** Specifies files that should not be committed to Git.
 
